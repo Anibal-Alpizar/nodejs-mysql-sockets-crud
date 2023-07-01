@@ -1,14 +1,15 @@
-import app from "./app.js";
-import { Server as Websocketserver } from "socket.io";
+import express from "express";
+import { Server as WebSocketServer } from "socket.io";
 import http from "http";
-import { connectDB } from "./db.js";
-import sockets from "./sockets.js";
+import Sockets from "./sockets";
 
-connectDB();
-
+const app = express();
 const server = http.createServer(app);
-const httpServer = server.listen(3000);
-console.log("Server is running on port 3000");
-const io = new Websocketserver(httpServer);
+app.use(express.static(__dirname + "/public"));
 
-sockets(io);
+const httpServer = server.listen(3000);
+console.log("Server on http://localhost:3000");
+
+const io = new WebSocketServer(httpServer);
+
+Sockets(io);
